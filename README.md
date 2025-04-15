@@ -1,10 +1,12 @@
-PART I: Define RL Environment
+Defining RL Environment
 Theme: The Adventures of Tintin
 Scenario Description:
 The Adventures of Tintin is a treasure hunting grid world environment in which Tintin, the
 agent, navigates through the grid that is filled with treasures, traps and a goal. Tintin should
 collect all the treasures while avoiding the traps and then reach the goal to complete his
 adventure.
+
+
 I. Components of the Environment:
 1. States:
 The grid world consists of 5 x 5 grid with the following positions:
@@ -49,6 +51,9 @@ order to maximize the rewards.
 5. Termination:
 The episode ends if either Tintin reaches the goal or maximum number of timestamps is
 reached.
+
+
+
 II. Visualization of the environment:
 I used a custom renderer class – TintinAdventureEnvRenderer for rendering the environment
 using images for different elements like- treasure, trap, agent goal, agent and goal, agent and
@@ -63,6 +68,9 @@ actions are behaving as expected, running through a single episode of max 100 st
 A sample of the execution for visualization:
 Episode 1 starts
 Action: 1, Reward: 2, Total Reward: 2
+
+
+
 III. Safety in AI
 To ensure safety in Adventures of Tintin grid environment, all actions of agent are
 bounded within by environment’s defined state-space using clipping mechanism (using
@@ -75,7 +83,11 @@ to 100 which terminates the episode in case Tintin fails to reach the goal withi
 steps. Finally, safeguards like state-reset mechanisms ensure that every episode starts
 from a well-defined initial state, maintaining the integrity of the environment and the
 agent's exploration.
-PART II: Implement SARSA
+
+***************************************************************************************************************************************
+
+
+Implement SARSA
 1. SARSA Method:
 SARSA (State-Action-Reward-State-Action) is an on-policy reinforcement ML algorithm
 which updates Q-values for state action pairs based on the action the agent selects using the
@@ -108,6 +120,8 @@ known actions based on the learned Q-values.
 or determined probabilistically, even when the same action is taken from the same
 state multiple times. SARSA is well suited for environments that are Stochastic in
 nature with transitions and rewards as it adapts based on the current policy.
+
+
 Advantages:
 • It handles Stochastic Environments well because it is advantageous when
 transitions or rewards are probabilistic, it leans directly from the actual policy.
@@ -115,6 +129,8 @@ transitions or rewards are probabilistic, it leans directly from the actual poli
 to more realistic behavior.
 • It uses exploration into updates by using the same policy for selecting and
 learning actions.
+
+
 Disadvantages:
 • Since it updates Q-values based on the current policy, the convergence is slow.
 • If the exploration rate is not decayed appropriately, the agent might never fully
@@ -125,7 +141,11 @@ necessary.
 adaptation to the dynamic environment.
 Reference: I referred to this source to understand SARSA:
 https://www.datacamp.com/tutorial/sarsa-reinforcement-learning-algorithm-in-python
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
 SARSA Implementation for my environment:
+
 In Tintin's Adventure, the SARSA algorithm was implemented to train an agent
 navigating a grid world environment, collecting treasures while avoiding traps, and
 reaching the goal state with maximum rewards.
@@ -139,7 +159,10 @@ collect treasures and reach the goal.
 • During testing, the agent exploited the learned policy (maximizing Q-values) to
 achieve a total reward of 232.
 • Visualizations were drawn to better understand the results.
-2. Hyperparameter Tuning:
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+3. Hyperparameter Tuning:
+
 How Hyperparameters influence performance:
 • Learning Rate (α):
 A higher learning rate allows the agent to quickly adapt its Q-values but may cause
@@ -170,7 +193,10 @@ Epsilon Decay : 0.095
 Epsilon min(𝛆𝒎𝒊𝒏): 0.01
 Epsilon max(𝛆𝒎𝒂𝒙): 0.5
 And the Best Average Reward was : 237.65
-3. Results and Evaluation:
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+4. Results and Evaluation:
 Total Rewards per Episode:
 The total rewards per episode showed significant improvement as training progressed.
 Initially, the agent received negative rewards due to exploration and missteps like traps
@@ -184,6 +210,8 @@ Final Performance:
 • Best Average Reward: 237.65 (which was computed over the last 100 episodes).
 • Test Episode Performance: The agent successfully completed the task with a final
 reward of 240 and a total of 450 successful episodes out of 1000.
+
+
 Understanding the Results:
 The optimized hyperparameters allowed the agent to prioritize long-term rewards (γ=0.95) by
 focusing on reaching the goal while collecting all treasures. A gradual epsilon decay ensured
@@ -192,7 +220,12 @@ promoted policy exploitation in later episodes.
 After nearly 200 episodes, rewards stabilized, that indicates the agent had learned an effective
 strategy. The final reward of 240 beat the initial runs (232–236), with a success rate of 450/1000
 episodes, which highlight the effectiveness of the tuned hyperparameters.
-PART III: Implement N-step Double Q-learning
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+
+Implement N-step Double Q-learning
+
 1. Derive the n-step Double Q-Learning update rule:
 Reference: for the below derivation and understanding of concepts, I extensively used: Reinforcement
 Learning: An Introduction, Second edition, Richard S. Sutton and Andrew G. Barto
@@ -348,7 +381,12 @@ All greedy episodes achieve a consistent reward of 240, indicating that the agen
 learned an optimal policy for n=2.This consistency suggests that n=2 allows the agent to
 balance short-term and long-term rewards effectively.
 These results suggest that n=2 is the optimal value for the environment.
+
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
 SARSA Vs n-step Q-learning:
+
 I plotted the following graph to compare the performances of SARSA and n-step Qlearning,
 considering total rewards per episode during their test performances as a factor.
 • n-step double Q-learning shows a significant improvement in rewards hitting the peak as
@@ -363,7 +401,10 @@ variability that leads to more stable performance.
 • Choice of the algorithm hence depends on the environment’s dynamics. For fast
 adaptation, n-step double Q learning is optimal while SARSA is suited better for
 environment requiring stability and noise tolerance.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 References:
+
 • https://gibberblot.github.io/rl-notes/single-agent/reward-shaping.html
 • https://www.datacamp.com/tutorial/sarsa-reinforcement-learning-algorithm-in-python
 • Reinforcement Learning: An Introduction, Second edition, Richard S. Sutton and Andrew G. Barto
@@ -373,7 +414,11 @@ References:
 sharepoint.com/personal/avereshc_buffalo_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fav
 ereshc%5Fbuffalo%5Fedu%2FDocuments%2F2024%5FFall%5FRL%2F%5Fpublic%2FCourse%20M
 aterials%2FRL%20Environment%20Visualization&ga=1
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Image References:
+
+
 I downloaded images of Tintin, goal, treasures, trap and neural tiles from the following open sources:
 • https://i.pinimg.com/236x/ac/fe/25/acfe2528ff0818525e991e0c6db272b8.jpg
 • https://www.shutterstock.com/image-vector/doodle-darger-caution-emblem-warning-260nw-
